@@ -1,11 +1,12 @@
 import { MantineProvider, createTheme } from "@mantine/core";
+import { AppRouter } from "./AppRouter";
 
 const theme = createTheme({});
 
 function App() {
   return (
     <MantineProvider theme={theme}>
-      <h1>Email Engine Web</h1>
+      <AppRouter />
     </MantineProvider>
   );
 }
