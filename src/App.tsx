@@ -1,15 +1,20 @@
 import { MantineProvider, createTheme } from "@mantine/core";
-import { AppRouter } from "./AppRouter";
 import { Notifications } from "@mantine/notifications";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { AppRouter } from "./AppRouter";
 
 const theme = createTheme({});
 
 function App() {
+  const queryClient = new QueryClient();
+
   return (
-    <MantineProvider theme={theme}>
-      <Notifications />
-      <AppRouter />
-    </MantineProvider>
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider theme={theme}>
+        <Notifications />
+        <AppRouter />
+      </MantineProvider>
+    </QueryClientProvider>
   );
 }
 
