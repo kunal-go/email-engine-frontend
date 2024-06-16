@@ -1,7 +1,13 @@
 import { FC, PropsWithChildren } from "react";
 import { Navigate, Outlet, ReactLocation, Route, Router } from "react-location";
 import { getAccessToken } from "./core";
-import { AccountPage, HomePage, LoginPage, LogoutPage } from "./pages";
+import {
+  AccountPage,
+  HomePage,
+  LoginPage,
+  LogoutPage,
+  RegisterPage,
+} from "./pages";
 
 const PrivateRoute: FC<PropsWithChildren> = ({ children }) => {
   const accessToken = getAccessToken();
@@ -21,6 +27,7 @@ export const routes: Route[] = [
     ),
   },
   { path: "/login", element: <LoginPage /> },
+  { path: "/register", element: <RegisterPage /> },
   { path: "/logout", element: <LogoutPage /> },
   {
     path: "/account",
