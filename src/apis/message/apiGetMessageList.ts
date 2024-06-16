@@ -19,7 +19,7 @@ export type MessageResponse = {
   isRead: boolean;
   isDraft: boolean;
   webLink: string;
-  body: string;
+  body: { contentType: string; content: string };
   sender: AddressObject;
   from: AddressObject;
   toRecipients: AddressObject[];

@@ -5,7 +5,7 @@ import { useQueryStore } from "../../common/hooks";
 type StoreShape = Awaited<ReturnType<typeof apiGetMessageList>>["data"];
 
 function getQueryKey(mailFolderId: string) {
-  return ["message", mailFolderId];
+  return ["message-list", mailFolderId];
 }
 
 export function useMessageListStore(accountId: string, mailFolderId: string) {
