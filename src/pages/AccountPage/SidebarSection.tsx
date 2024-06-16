@@ -1,47 +1,61 @@
-import { FC, useEffect } from "react";
+import { Loader } from "@mantine/core";
+import { FC, useEffect, useMemo } from "react";
 import { AccountResponse } from "../../apis/account/apiGetAccountList";
 import { MailFolderResponse } from "../../apis/mailFolder/apiGetMailFolderList";
+import { useMailFolderListStore } from "./useMailFolderListStore";
+import { useNavigate } from "react-location";
 
 type Props = {
   account: AccountResponse;
-  mailFolderList: MailFolderResponse[];
-  selectedFolderId?: string;
-  setSelectedFolderId: (folderId?: string) => void;
+  selectedFolder?: MailFolderResponse;
+  setSelectedFolder: (folder?: MailFolderResponse) => void;
 };
 
-export const Sidebar: FC<Props> = ({
+export const SidebarSection: FC<Props> = ({
   account,
-  mailFolderList,
-  selectedFolderId,
-  setSelectedFolderId,
+  selectedFolder,
+  setSelectedFolder,
 }) => {
+  const navigate = useNavigate();
+  const mailFolderListStore = useMailFolderListStore(account.id);
+  const { data, isLoading } = mailFolderListStore.getState();
+  const mailFolderList = useMemo(() => data?.list || [], [data]);
+
   useEffect(() => {
-    if (!selectedFolderId && mailFolderList.length > 0) {
-      setSelectedFolderId(mailFolderList[0].id);
+    if (!selectedFolder && mailFolderList.length > 0) {
+      setSelectedFolder(mailFolderList[0]);
     }
-  }, [mailFolderList, selectedFolderId, setSelectedFolderId]);
+  }, [mailFolderList, selectedFolder, setSelectedFolder]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="bg-gray-800 min-h-screen text-gray-300 flex flex-col">
       <div className="bg-gray-700 text-white text-center p-3">
         <div className="font-bold text-xl">{account.name}</div>
         <div>{account.email}</div>
+        <div>{account.type} Account</div>
         <div className="mt-2">
-          <button className="bg-gray-800 text-gray-100 p-2 px-3 rounded-md text-sm hover:bg-gray-900">
+          <button
+            className="bg-gray-800 text-gray-100 p-2 px-3 rounded-md text-xs hover:bg-gray-900"
+            onClick={() => navigate({ to: "/" })}
+          >
             Go Back
           </button>
         </div>
       </div>
       <div className="flex flex-col gap-1 p-6">
         {mailFolderList.map((folder) => {
-          const isSelected = folder.id === selectedFolderId;
+          const isSelected = folder.id === selectedFolder?.id;
           return (
             <div
               key={folder.id}
               className={`p-2 px-4 hover:bg-gray-700 rounded-md hover:cursor-pointer flex flex-row justify-between font-semibold items-center ${
                 isSelected ? "bg-gray-700 text-white" : ""
               }`}
-              onClick={() => setSelectedFolderId(folder.id)}
+              onClick={() => setSelectedFolder(folder)}
             >
               <div>{folder.name}</div>
               {folder.unreadItemCount > 0 && (

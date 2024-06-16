@@ -1,18 +1,14 @@
 import { Loader, Text } from "@mantine/core";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-location";
 import { AccountResponse } from "../../apis/account/apiGetAccountList";
 import { useAccountListStore } from "./useAccountListStore";
 
 export const AccountListView: FC = () => {
-  const accountListStore = useAccountListStore();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    accountListStore.fetch();
-  }, [accountListStore]);
-
+  const accountListStore = useAccountListStore();
   const { data, isLoading } = accountListStore.getState();
+
   if (isLoading) {
     return <Loader />;
   }
@@ -49,10 +45,11 @@ const AccountItem: FC<AccountItemProps> = ({ account, ...rest }) => {
   return (
     <div
       key={account.id}
-      className="bg-gray-100 p-3 px-4 rounded-lg hover:cursor-pointer hover:bg-gray-200 hover:shadow-sm hover:transition-shadow duration-200"
+      className="border p-3 px-4 rounded-lg hover:cursor-pointer hover:bg-gray-200"
       {...rest}
     >
-      <Text className="text-xl font-bold">{account.email}</Text>
+      <Text className="text-xl font-bold">{account.name}</Text>
+      <Text>{account.email}</Text>
       <Text>{account.type} Account</Text>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import {
   QueryFunction,
   QueryKey,
@@ -12,9 +12,7 @@ export function useQueryStore<T>(
   queryFn: QueryFunction<T, QueryKey>,
   options: UseQueryOptions<T, Error> = {}
 ) {
-  const [enabled, setEnabled] = useState(false);
-  useQuery<T, Error>(queryKey, queryFn, { ...options, enabled });
-  const fetch = useCallback(() => setEnabled(true), [setEnabled]);
+  useQuery<T, Error>(queryKey, queryFn, options);
 
   const queryClient = useQueryClient();
   const getState = useCallback(() => {
@@ -40,5 +38,5 @@ export function useQueryStore<T>(
     [queryClient, queryKeyForAllInvalidation]
   );
 
-  return { fetch, getState, invalidate, invalidateAll };
+  return { getState, invalidate, invalidateAll };
 }

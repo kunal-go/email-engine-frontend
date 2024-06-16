@@ -1,50 +1,48 @@
 import { Loader } from "@mantine/core";
-import { FC, useEffect, useState } from "react";
-import { Sidebar } from "./Sidebar";
+import { FC, useState } from "react";
+import { MailFolderResponse } from "../../apis/mailFolder/apiGetMailFolderList";
+import { MessageResponse } from "../../apis/message/apiGetMessageList";
+import { EmailListSection } from "./EmailListSection";
+import { SidebarSection } from "./SidebarSection";
 import { useAccountStore } from "./useAccountStore";
-import { useMailFolderListStore } from "./useMailFolderListStore";
-
-function useFetchData(accountId: string) {
-  const accountStore = useAccountStore(accountId);
-  const mailFolderListStore = useMailFolderListStore(accountId);
-
-  useEffect(() => {
-    accountStore.fetch();
-    mailFolderListStore.fetch();
-  }, [accountStore, mailFolderListStore]);
-
-  const accountState = accountStore.getState();
-  const mailFolderState = mailFolderListStore.getState();
-  const isLoading = accountState.isLoading || mailFolderState.isLoading;
-  return {
-    account: accountState.data,
-    mailFolderList: mailFolderState.data,
-    isLoading,
-  };
-}
 
 export const AccountPage: FC<{ accountId: string }> = ({ accountId }) => {
-  const [selectedFolderId, setSelectedFolderId] = useState<string>();
-  const { account, mailFolderList, isLoading } = useFetchData(accountId);
+  const [selectedFolder, setSelectedFolder] = useState<MailFolderResponse>();
+  const [selectedMessage, setSelectedMessage] = useState<MessageResponse>();
+  const accountStore = useAccountStore(accountId);
+  const { data, isLoading } = accountStore.getState();
+
   if (isLoading) {
     return <Loader />;
   }
-  if (!account) {
+  if (!data) {
     return <div>Account not found</div>;
   }
 
   return (
     <div className="flex w-full">
-      <div className="flex-[1]">
-        <Sidebar
-          account={account}
-          mailFolderList={mailFolderList?.list || []}
-          selectedFolderId={selectedFolderId}
-          setSelectedFolderId={setSelectedFolderId}
+      <div className="flex-[3]">
+        <SidebarSection
+          account={data}
+          selectedFolder={selectedFolder}
+          setSelectedFolder={setSelectedFolder}
         />
       </div>
-      <div className="flex-[1]">Emails List</div>
-      <div className="flex-[2]">Email View</div>
+      <div className="flex-[5] border-r border-gray-300">
+        {selectedFolder ? (
+          <EmailListSection
+            account={data}
+            selectedFolder={selectedFolder}
+            selectedMessage={selectedMessage}
+            setSelectedMessage={setSelectedMessage}
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full text-gray-500">
+            Select a folder to view emails
+          </div>
+        )}
+      </div>
+      <div className="flex-[7]">Email View</div>
     </div>
   );
 };
