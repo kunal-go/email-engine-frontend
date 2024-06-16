@@ -5,7 +5,7 @@ import { useQueryStore } from "../../common/hooks";
 type StoreShape = Awaited<ReturnType<typeof apiGetAccountList>>["data"];
 
 export function useAccountListStore() {
-  const queryKey = "admin-account-list";
+  const queryKey = "account-list";
   const queryFn = useCallback(async () => {
     const { data } = await apiGetAccountList();
     return data;

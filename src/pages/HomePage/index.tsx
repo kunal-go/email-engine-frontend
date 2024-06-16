@@ -1,14 +1,7 @@
 import { Button, Container, Text, Title } from "@mantine/core";
-import { Navigate } from "react-location";
-import { getAccessToken } from "../../core";
 import { AccountListView } from "./AccountListView";
 
 export const HomePage = () => {
-  const accessToken = getAccessToken();
-  if (!accessToken) {
-    return <Navigate to="/login" />;
-  }
-
   return (
     <Container className="mt-10">
       <div className="flex flex-col gap-4 max-w-lg mx-auto">
