@@ -6,6 +6,7 @@ import {
   HomePage,
   LoginPage,
   LogoutPage,
+  MicrosoftAuthRedirectPage,
   RegisterPage,
 } from "./pages";
 
@@ -28,6 +29,7 @@ export const routes: Route[] = [
   },
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <RegisterPage /> },
+  { path: "/msal", element: <MicrosoftAuthRedirectPage /> },
   { path: "/logout", element: <LogoutPage /> },
   {
     path: "/account",

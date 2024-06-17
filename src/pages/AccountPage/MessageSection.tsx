@@ -65,11 +65,13 @@ export const MessageSection: FC<Props> = ({ selectedMessage }) => {
           </div>
           <div>
             {selectedMessage.body.contentType === "html" ? (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: selectedMessage.body.content,
-                }}
-              />
+              <div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: selectedMessage.body.content,
+                  }}
+                />
+              </div>
             ) : null}
           </div>
         </div>
