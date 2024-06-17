@@ -1,7 +1,9 @@
-import { Loader, Text } from "@mantine/core";
+import { Button, Loader, Text } from "@mantine/core";
 import { FC } from "react";
 import { useNavigate } from "react-location";
 import { AccountResponse } from "../../apis/account/apiGetAccountList";
+import { useCustomDisclosure } from "../../common/hooks/useCustomDisclosure";
+import { RemoveAccountModal } from "./RemoveAccountModal";
 import { useAccountListStore } from "./useAccountListStore";
 
 export const AccountListView: FC = () => {
@@ -37,20 +39,37 @@ export const AccountListView: FC = () => {
   );
 };
 
-type AccountItemProps = React.HTMLAttributes<HTMLDivElement> & {
+type AccountItemProps = {
   account: AccountResponse;
+  onClick?: () => void;
 };
 
-const AccountItem: FC<AccountItemProps> = ({ account, ...rest }) => {
+const AccountItem: FC<AccountItemProps> = ({ account, onClick }) => {
+  const removeAccountModal = useCustomDisclosure();
+
   return (
     <div
       key={account.id}
-      className="border p-3 px-4 rounded-lg hover:cursor-pointer hover:bg-gray-200"
-      {...rest}
+      className="border p-3 px-4 rounded-lg hover:cursor-pointer hover:bg-gray-200 flex flex-row justify-between items-center"
     >
-      <Text className="text-xl font-bold">{account.name}</Text>
-      <Text>{account.email}</Text>
-      <Text>{account.type} Account</Text>
+      <div onClick={onClick}>
+        <Text className="text-xl font-bold">{account.name}</Text>
+        <Text>{account.email}</Text>
+        <Text>{account.type} Account</Text>
+      </div>
+      <div>
+        <Button
+          variant="subtle"
+          color="red"
+          onClick={(e) => {
+            e.stopPropagation();
+            removeAccountModal.open();
+          }}
+        >
+          Remove
+        </Button>
+        <RemoveAccountModal {...removeAccountModal} accountId={account.id} />
+      </div>
     </div>
   );
 };

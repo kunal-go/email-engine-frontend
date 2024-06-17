@@ -1,9 +1,10 @@
 import { Loader } from "@mantine/core";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo } from "react";
+import { useNavigate } from "react-location";
+import { apiAccountSyncData } from "../../apis";
 import { AccountResponse } from "../../apis/account/apiGetAccountList";
 import { MailFolderResponse } from "../../apis/mailFolder/apiGetMailFolderList";
 import { useMailFolderListStore } from "./useMailFolderListStore";
-import { useNavigate } from "react-location";
 
 type Props = {
   account: AccountResponse;
@@ -21,6 +22,10 @@ export const SidebarSection: FC<Props> = ({
   const { data, isLoading } = mailFolderListStore.getState();
   const mailFolderList = useMemo(() => data?.list || [], [data]);
 
+  const handleSyncDataClick = useCallback(async () => {
+    await apiAccountSyncData(account.id);
+  }, [account]);
+
   useEffect(() => {
     if (!selectedFolder && mailFolderList.length > 0) {
       setSelectedFolder(mailFolderList[0]);
@@ -37,12 +42,18 @@ export const SidebarSection: FC<Props> = ({
         <div className="font-bold text-xl">{account.name}</div>
         <div>{account.email}</div>
         <div>{account.type} Account</div>
-        <div className="mt-2">
+        <div className="mt-2 flex gap-2 justify-center">
           <button
             className="bg-gray-800 text-gray-100 p-2 px-3 rounded-md text-xs hover:bg-gray-900"
             onClick={() => navigate({ to: "/" })}
           >
             Go Back
+          </button>
+          <button
+            className="bg-gray-800 text-gray-100 p-2 px-3 rounded-md text-xs hover:bg-gray-900"
+            onClick={handleSyncDataClick}
+          >
+            Sync Data
           </button>
         </div>
       </div>

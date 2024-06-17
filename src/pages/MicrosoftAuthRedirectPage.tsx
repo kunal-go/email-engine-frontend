@@ -1,50 +1,46 @@
-import { Loader } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Navigate, useNavigate } from "react-location";
 import { apiLinkMicrosoftAccount } from "../apis";
+import { useAccountListStore } from "./HomePage/useAccountListStore";
 
 export const MicrosoftAuthRedirectPage = () => {
-  const navigate = useNavigate();
+  const isStartedFlagRef = useRef(false);
   const urlParams = new URLSearchParams(window.location.search);
-  const code = urlParams.get("code");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
-
-  const linkMicrosoftAccount = useCallback(
-    async (code: string) => {
-      setIsLoading(true);
-      try {
-        await apiLinkMicrosoftAccount({ authorizationCode: code });
-        notifications.show({
-          color: "blue",
-          message: "Microsoft account linked",
-        });
-      } catch (err) {
-        notifications.show({
-          color: "red",
-          message: "Microsoft authentication failed",
-        });
-      } finally {
-        setIsCompleted(true);
-        setIsLoading(false);
-        navigate({ to: "/" });
-      }
-    },
-    [navigate]
-  );
+  const codeParam = urlParams.get("code");
+  const navigate = useNavigate();
+  const accountListStore = useAccountListStore();
 
   useEffect(() => {
-    if (code && !isLoading && !isCompleted) {
-      linkMicrosoftAccount(code);
+    if (isStartedFlagRef.current) {
+      return;
     }
-  }, [code, linkMicrosoftAccount, isLoading, isCompleted]);
+    isStartedFlagRef.current = true;
+    if (!codeParam) {
+      return;
+    }
 
-  if (!code) {
+    apiLinkMicrosoftAccount({ authorizationCode: codeParam })
+      .then(() => {
+        accountListStore.invalidateAll().then(() => {
+          navigate({ to: "/" });
+        });
+      })
+      .catch((err) => {
+        notifications.show({
+          color: "red",
+          message: err.message || "Microsoft authentication failed",
+        });
+        navigate({ to: "/" });
+      })
+      .finally(() => {
+        isStartedFlagRef.current = false;
+      });
+  }, [codeParam, navigate, accountListStore]);
+
+  if (!codeParam) {
     return <Navigate to="/" />;
   }
-  if (isLoading) {
-    return <Loader />;
-  }
-  return <Navigate to="/" />;
+
+  return null;
 };
