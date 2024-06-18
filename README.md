@@ -1,30 +1,39 @@
-# React + TypeScript + Vite
+# Email Engine Core (Frontend)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend repository for the Email Engine Core. It is built using [React](https://reactjs.org/), Vite, Tailwind CSS and [Mantine UI](https://mantine.dev/).
+Also checkout [Email Engine Core (Backend) Repository](https://github.com/kunal-go/email-engine-backend)
 
-Currently, two official plugins are available:
+![Login Screen](image-2.png)
+![Account View](image-1.png)
+![Email view](image.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Email client where you can link your multiple email accounts and view all your emails in one place.
+- Right now, only Microsoft Outlook is supported with Microsoft OAuth2.0 authentication.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Setup and Installation
 
-- Configure the top-level `parserOptions` property like this:
+### Steps 1: Set environment variables
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+create `.env` file in the root directory and add the following environment variables:
+
+```javascript
+VITE_API_BASE_URL = "http://localhost:3000"; // URL of the backend server
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Steps 2: Install project dependencies
+
+```bash
+$ pnpm install
+```
+
+## Run the application
+
+```bash
+$ pnpm dev
+```
+
+## License
+
+[MIT licensed](LICENSE).
