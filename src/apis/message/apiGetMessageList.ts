@@ -38,13 +38,17 @@ type ResponseShape = {
 export async function apiGetMessageList({
   accountId,
   mailFolderId,
+  page,
+  size,
 }: {
   accountId: string;
   mailFolderId: string;
+  page: number;
+  size: number;
 }) {
   const httpApi = new HttpApi<ResponseShape>(
     "get",
     `/account/${accountId}/mail-folder/${mailFolderId}/message`
   );
-  return await httpApi.send({ useAccessToken: true });
+  return await httpApi.send({ useAccessToken: true, query: { page, size } });
 }
