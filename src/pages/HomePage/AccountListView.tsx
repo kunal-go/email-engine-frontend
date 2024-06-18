@@ -2,7 +2,7 @@ import { Button, Loader, Text } from "@mantine/core";
 import { FC } from "react";
 import { useNavigate } from "react-location";
 import { AccountResponse } from "../../apis/account/apiGetAccountList";
-import { useCustomDisclosure } from "../../common/hooks/useCustomDisclosure";
+import { useCustomDisclosure } from "../../common/hooks/";
 import { RemoveAccountModal } from "./RemoveAccountModal";
 import { useAccountListStore } from "./useAccountListStore";
 

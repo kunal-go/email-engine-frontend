@@ -1,6 +1,6 @@
 import { Button, Container, Text, Title } from "@mantine/core";
 import { useNavigate } from "react-location";
-import { useCustomDisclosure } from "../../common/hooks/useCustomDisclosure";
+import { useCustomDisclosure } from "../../common/hooks";
 import { AccountListView } from "./AccountListView";
 import { AddAccountModal } from "./AddAccountModal";
 
